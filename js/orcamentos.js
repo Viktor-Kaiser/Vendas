@@ -44,11 +44,12 @@ async function renderOrcamentos() {
                   <td><span class="badge ${o.status}">${o.status}</span></td>
                   <td class="muted">${fmtData(o.created_at)}</td>
                   <td>
-                    ${o.status === 'pendente' ? `
-                      <div class="btn-group">
-                        <button class="btn ghost sm" onclick="confirmarOrcamento('${o.id}')">✓ Confirmar</button>
-                        <button class="btn danger sm" onclick="cancelarOrcamento('${o.id}')">✕ Cancelar</button>
-                      </div>` : ''}
+                    <div class="btn-group">
+                      <button class="btn ghost sm" onclick="baixarOrcamentoExcel('${o.id}')" title="Baixar Excel">⬇ Excel</button>
+                      ${o.status === 'pendente' ? `
+                      <button class="btn ghost sm" onclick="confirmarOrcamento('${o.id}')">✓ Confirmar</button>
+                      <button class="btn danger sm" onclick="cancelarOrcamento('${o.id}')">✕ Cancelar</button>` : ''}
+                    </div>
                   </td>
                 </tr>`).join('')}
           </tbody>
