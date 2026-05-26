@@ -53,6 +53,7 @@ function abrirModalCliente(cliente = null) {
   document.getElementById('modal-cliente-sub').textContent    = novo ? '' : cliente.nome;
   document.getElementById('c-nome').value    = cliente?.nome         || '';
   document.getElementById('c-cpf').value     = cliente?.cpf_cnpj    || '';
+  document.getElementById('c-email').value   = cliente?.email        || '';
   document.getElementById('c-tel').value     = cliente?.telefone     || '';
   document.getElementById('c-wpp').value     = cliente?.whatsapp     || '';
   document.getElementById('c-cidade').value  = cliente?.cidade       || 'Manaus';
@@ -72,6 +73,7 @@ async function salvarCliente() {
     const dados = {
       nome,
       cpf_cnpj:    document.getElementById('c-cpf').value.trim(),
+      email:       document.getElementById('c-email').value.trim(),
       telefone:    document.getElementById('c-tel').value.trim(),
       whatsapp:    document.getElementById('c-wpp').value.trim(),
       cidade:      document.getElementById('c-cidade').value.trim() || 'Manaus',
