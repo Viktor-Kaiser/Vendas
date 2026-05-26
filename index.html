@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ramsons CRM</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- ══════════ LOGIN ══════════ -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-mark">R</div>
+      <div>
+        <div class="login-title">Ramsons CRM</div>
+        <div class="login-sub">Sistema de Vendas</div>
+      </div>
+    </div>
+    <div class="login-form">
+      <div id="login-err" class="login-err"></div>
+      <div class="form-group">
+        <label class="form-label">Usuário</label>
+        <input id="l-usuario" type="text" placeholder="seu.usuario" autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Senha</label>
+        <input id="l-senha" type="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="btn-login" id="btn-login" onclick="fazerLogin()">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ APP ══════════ -->
+<div id="app" style="display:none">
+
+  <!-- SIDEBAR -->
+  <nav id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">R</div>
+      <div>
+        <div class="logo-name">Ramsons</div>
+        <div class="logo-ver">CRM v3.0</div>
+      </div>
+    </div>
+
+    <div class="sidebar-nav">
+      <div class="nav-section">Principal</div>
+      <div class="nav-item" data-page="dashboard" onclick="ir('dashboard')">
+        <span class="nav-icon">▦</span> Dashboard
+      </div>
+      <div class="nav-item" data-page="clientes" onclick="ir('clientes')">
+        <span class="nav-icon">◎</span> Clientes
+      </div>
+      <div class="nav-item" data-page="orcamentos" onclick="ir('orcamentos')">
+        <span class="nav-icon">◈</span> Orçamentos
+        <span class="nav-badge" id="badge-orc" style="display:none">0</span>
+      </div>
+      <div class="nav-item" data-page="historico" onclick="ir('historico')">
+        <span class="nav-icon">◷</span> Histórico
+      </div>
+
+      <div class="nav-section">Catálogo</div>
+      <div class="nav-item" data-page="produtos" onclick="ir('produtos')">
+        <span class="nav-icon">◫</span> Produtos
+      </div>
+
+      <div class="nav-section admin-only" style="display:none">Administração</div>
+      <div class="nav-item admin-only" data-page="admin" style="display:none" onclick="ir('admin')">
+        <span class="nav-icon">⊞</span> Administração
+      </div>
+    </div>
+
+    <div class="sidebar-user">
+      <div class="user-avatar" id="user-avatar">A</div>
+      <div class="user-info">
+        <div class="user-name"  id="user-nome">—</div>
+        <div class="user-cargo" id="user-cargo">—</div>
+      </div>
+      <button class="btn-logout" onclick="fazerLogout()" title="Sair">⏻</button>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div id="main">
+    <div id="topbar">
+      <div class="topbar-title" id="page-title">Dashboard</div>
+      <div class="search-wrap">
+        <input type="search" id="busca-global" placeholder="Buscar cliente...">
+      </div>
+      <button class="btn-novo" onclick="acaoNovo()">+ Novo</button>
+    </div>
+    <div id="content">
+      <div class="loading"><div class="spinner"></div>CARREGANDO...</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MODAL: CLIENTE ══════════ -->
+<div class="overlay" id="modal-cliente">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modal-cliente-titulo">Novo Cliente</div>
+        <div class="modal-sub"   id="modal-cliente-sub"></div>
+      </div>
+      <button class="btn-close" onclick="fecharModal('modal-cliente')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">Nome Completo *</label>
+          <input id="c-nome" placeholder="Nome do cliente">
+        </div>
+        <div class="form-group">
+          <label class="form-label">CPF / CNPJ</label>
+          <input id="c-cpf" placeholder="000.000.000-00">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Telefone</label>
+          <input id="c-tel" placeholder="(92) 99999-9999">
+        </div>
+        <div class="form-group">
+          <label class="form-label">WhatsApp</label>
+          <input id="c-wpp" placeholder="(92) 99999-9999">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cidade</label>
+          <input id="c-cidade" placeholder="Manaus">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Endereço</label>
+          <input id="c-end" placeholder="Rua, número, bairro">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Observações</label>
+          <textarea id="c-obs" placeholder="Observações sobre o cliente..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn ghost" onclick="fecharModal('modal-cliente')">Cancelar</button>
+      <button class="btn primary" id="btn-salvar-cliente" onclick="salvarCliente()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MODAL: DETALHE CLIENTE ══════════ -->
+<div class="overlay" id="modal-detalhe">
+  <div class="modal lg">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="det-nome">—</div>
+        <div class="modal-sub"   id="det-id">—</div>
+      </div>
+      <button class="btn-close" onclick="fecharModal('modal-detalhe')">✕</button>
+    </div>
+    <div class="modal-body"   id="det-body"></div>
+    <div class="modal-footer" id="det-footer"></div>
+  </div>
+</div>
+
+<!-- ══════════ MODAL: ORÇAMENTO ══════════ -->
+<div class="overlay" id="modal-orc">
+  <div class="modal lg">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Novo Orçamento</div>
+        <div class="modal-sub" id="orc-cliente-nome"></div>
+      </div>
+      <button class="btn-close" onclick="fecharModal('modal-orc')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="margin-bottom:16px">
+        <div class="form-group">
+          <label class="form-label">Buscar Produto</label>
+          <input id="orc-busca" placeholder="Digite o código ou nome..." oninput="buscarProdutoOrc()">
+        </div>
+        <div id="orc-sugestoes"
+             style="background:var(--bg4);border:1px solid var(--border);border-radius:8px;margin-top:4px;display:none;max-height:200px;overflow-y:auto">
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <table>
+          <thead>
+            <tr><th>Produto</th><th>Qtd</th><th>Unit.</th><th>Total</th><th></th></tr>
+          </thead>
+          <tbody id="orc-itens"></tbody>
+        </table>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:24px;align-items:center;margin-bottom:16px">
+        <div>
+          <label class="form-label">Desconto (R$)</label>
+          <input id="orc-desconto" type="number" min="0" style="width:120px;margin-top:4px" value="0" oninput="calcOrcTotal()">
+        </div>
+        <div style="text-align:right">
+          <div class="form-label">Total</div>
+          <div style="font-size:24px;font-weight:700;color:var(--green);margin-top:4px" id="orc-total">R$ 0,00</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Observações</label>
+        <textarea id="orc-obs" placeholder="Observações do orçamento..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn ghost"   onclick="fecharModal('modal-orc')">Cancelar</button>
+      <button class="btn primary" onclick="salvarOrcamento()">Criar Orçamento</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MODAL: VENDEDOR ══════════ -->
+<div class="overlay" id="modal-vendedor">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modal-vend-titulo">Novo Vendedor</div>
+      </div>
+      <button class="btn-close" onclick="fecharModal('modal-vendedor')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="form-label">Nome *</label>
+          <input id="v-nome" placeholder="Nome completo">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Usuário *</label>
+          <input id="v-usuario" placeholder="nome.sobrenome">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Senha *</label>
+          <input id="v-senha" type="password" placeholder="Mínimo 6 caracteres">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Cargo</label>
+          <select id="v-cargo">
+            <option value="vendedor">Vendedor</option>
+            <option value="coadmin">Coadmin</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Meta Mensal (R$)</label>
+          <input id="v-meta" type="number" placeholder="0" min="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input id="v-email" type="email" placeholder="email@ramsons.com.br">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Telefone</label>
+          <input id="v-tel" placeholder="(92) 99999-9999">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn ghost"   onclick="fecharModal('modal-vendedor')">Cancelar</button>
+      <button class="btn primary" id="btn-salvar-vend" onclick="salvarVendedor()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MODAL: CONFIRMAÇÃO ══════════ -->
+<div class="overlay" id="modal-confirm">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">⚠️ Confirmar ação</div>
+      <button class="btn-close" onclick="fecharModal('modal-confirm')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="confirm-msg" id="confirm-msg"></p>
+      <div class="btn-group" style="justify-content:flex-end">
+        <button class="btn ghost"  onclick="fecharModal('modal-confirm')">Cancelar</button>
+        <button class="btn danger" id="btn-confirmar-acao">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ TOAST ══════════ -->
+<div class="toast" id="toast">
+  <span class="ti" id="toast-icon">●</span>
+  <span id="toast-msg"></span>
+</div>
+
+<!-- ══════════ SCRIPTS — ordem importa ══════════ -->
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/router.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/clientes.js"></script>
+<script src="js/orcamentos.js"></script>
+<script src="js/pages.js"></script>
+
+</body>
+</html>
