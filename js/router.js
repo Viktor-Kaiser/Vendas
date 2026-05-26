@@ -13,6 +13,7 @@ function ir(pagina) {
     orcamentos: 'Orçamentos',
     historico:  'Histórico',
     produtos:   'Produtos',
+    marketing:  'Campanhas de Marketing',
     admin:      'Administração',
   };
 
@@ -30,6 +31,7 @@ function ir(pagina) {
     orcamentos: renderOrcamentos,
     historico:  renderHistorico,
     produtos:   renderProdutos,
+    marketing:  renderMarketing,
     admin:      renderAdmin,
   };
 
