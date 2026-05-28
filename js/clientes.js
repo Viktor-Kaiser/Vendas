@@ -114,6 +114,7 @@ async function abrirDetalheCliente(id) {
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
         ${campo('CPF/CNPJ',   cl.cpf_cnpj  || '—')}
         ${campo('Status',     cl.status)}
+        ${campo('Email',      cl.email      || '—')}
         ${campo('Telefone',   cl.telefone   || '—')}
         ${campo('WhatsApp',   cl.whatsapp   || '—')}
         ${campo('Cidade',     cl.cidade     || '—')}
